@@ -1,0 +1,1 @@
+tail +7 $1 > temp && mv temp $1
