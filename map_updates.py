@@ -214,6 +214,7 @@ def add_new_contacts(district_name: str, report_path: str, contacts: Dict[str, D
     with open(report_path, 'a', encoding='UTF-8') as report_file:
         writer = csv.DictWriter(report_file, fieldnames=existing_headers)
 
+	# TODO need to figure out how new accts can be added (Contact ID = null?)
         for contact in contacts.values():
             row = {}
             row['Account Name'] = district_name
