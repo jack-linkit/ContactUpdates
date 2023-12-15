@@ -60,7 +60,7 @@ def get_nav_communication(row: Dict[str, str]) -> list:
             nav_communication.append("CCR")
 
         if row.get(NAV_HEADERS[5]) and row[NAV_HEADERS[5]] == "TRUE":
-            nav_communication.append("ELLs/MLs")
+            nav_communication.append("ELL")
 
         if row.get(NAV_HEADERS[6]) and row[NAV_HEADERS[6]] == "TRUE":
             nav_communication.append("Reading Levels")
@@ -141,6 +141,7 @@ def create_updates(row: Dict[str, str], role_dict: Dict[str, str]) -> dict:
         else:
             raise e
     email = row['Email'].strip()
+    email = ''.join(email.split())
 
     nav_communication = get_nav_communication(row)
 
@@ -152,7 +153,7 @@ def create_updates(row: Dict[str, str], role_dict: Dict[str, str]) -> dict:
     user['lastname'] = lastname
     user['title'] = title
     user['role'] = role
-    user['email'] = email
+    user['email'] = email.lower()
     user['nav_communication'] = ';'.join(nav_communication)
     user['planning_communication'] = ';'.join(planning_communication)
     user['additional_responsibilities'] = ';'.join(additional_responsibilities)
@@ -202,12 +203,12 @@ def update_report(report_path: str, contacts: Dict[str, Dict[str, str]]) -> set:
         file_existed = os.path.exists(OUTPUT_PATH)
         with open(OUTPUT_PATH, 'a', encoding='UTF-8') as new_report_file:
             reader = csv.DictReader(report_file)
-            writer = csv.DictWriter(new_report_file, fieldnames=reader.fieldnames)
+            writer = csv.DictWriter(new_report_file, fieldnames=reader.fieldnames, quoting=csv.QUOTE_NONNUMERIC)
             if not file_existed:
                 writer.writeheader()
 
             for row in reader:
-                if row['Email'] in contacts:
+                if row['Email'].lower() in contacts:
                     contact = contacts[row['Email']]
                     row['First Name'] = contact['firstname']
                     row['Last Name'] = contact['lastname']
@@ -228,8 +229,8 @@ def add_new_contacts(district_name: str, report_path: str, contacts: Dict[str, D
         reader = csv.DictReader(report_file)
         existing_headers = reader.fieldnames
 
-    with open(report_path, 'a', encoding='UTF-8') as report_file:
-        writer = csv.DictWriter(report_file, fieldnames=existing_headers)
+    with open(OUTPUT_PATH, 'a', encoding='UTF-8') as report_file:
+        writer = csv.DictWriter(report_file, fieldnames=existing_headers, quoting=csv.QUOTE_NONNUMERIC)
 
 	# TODO need to figure out how new accts can be added (Contact ID = null?)
         for contact in contacts.values():
