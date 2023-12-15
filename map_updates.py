@@ -1,8 +1,11 @@
 import csv
 import sys
+import os
+import pprint
 from typing import Dict, Generator, Any
 
 REPORT_PATH = 'salesforce_contacts.csv'
+OUTPUT_PATH = 'new_report.csv'
 
 NAV_HEADERS = ['Complimen- tary 5 Year State Report', 'District-Level Benchmark Reports', 'School-Level Benchmark Reports', 'Teacher- Level Benchmark Reports', 'College & Career Readiness Reports', 'ELLs/MLs Reports', 'Reading Level Reports', 'Attendance, Grades, Behavior Reports', 'Equity and Demographics Studies', 'Teacher Comparison']
 PLANNING_HEADERS = ['Sending Rosters', 'Assessment Calendar', 'Data Locker Management']
@@ -34,7 +37,8 @@ def read_contact_updates(district_file_path: str) -> Generator[Dict[str, str], N
     with open(district_file_path, 'r') as district_file:
         reader = csv.DictReader(district_file)
         for row in reader:
-            yield row
+            if len(row['Email']) > 0 and len(row['Title']) > 0:
+                yield row
     
 def get_nav_communication(row: Dict[str, str]) -> list:
     """Gets the navigator communication preferences for the contact"""
@@ -118,13 +122,24 @@ def create_updates(row: Dict[str, str], role_dict: Dict[str, str]) -> dict:
     """Creates the updates for each contact."""
     user = {}
     # TODO might be worth removing firstname and lastname
+    # check if there is a salutation in the name
+    salutations = ["Mr.", "Ms.", "Mrs.", "Dr."]
+    if row['Name'].split()[0] in salutations:
+        row['Name'] = row['Name'].split('.')[1].strip()
+    
     try:
         firstname, lastname = row['Name'].split()
     except ValueError:
-        raise ValueError(f"Could not split name: {row[1]}")
+        raise ValueError(f"Could not split name: {row['Name']}")
 
     title = row['Title'].strip()
-    role = role_dict[title].strip()
+    try:
+        role = role_dict[title].strip()
+    except KeyError as e:
+        if "Supervisor" in title:
+            role = "Student Services Leadership"
+        else:
+            raise e
     email = row['Email'].strip()
 
     nav_communication = get_nav_communication(row)
@@ -184,10 +199,12 @@ def update_report(report_path: str, contacts: Dict[str, Dict[str, str]]) -> set:
     # only rows that were updated are written to the new file
     existing_contacts = set()
     with open(report_path, 'r', encoding='UTF-8') as report_file:
-        with open('new_report.csv', 'w', encoding='UTF-8') as new_report_file:
+        file_existed = os.path.exists(OUTPUT_PATH)
+        with open(OUTPUT_PATH, 'a', encoding='UTF-8') as new_report_file:
             reader = csv.DictReader(report_file)
             writer = csv.DictWriter(new_report_file, fieldnames=reader.fieldnames)
-            writer.writeheader()
+            if not file_existed:
+                writer.writeheader()
 
             for row in reader:
                 if row['Email'] in contacts:
@@ -219,6 +236,7 @@ def add_new_contacts(district_name: str, report_path: str, contacts: Dict[str, D
             row = {}
             row['Account Name'] = district_name
             row['Account ID'] = acct_dict[district_name]
+            row['Contact ID'] = ''
             row['First Name'] = contact['firstname']
             row['Last Name'] = contact['lastname']
             row['Title'] = contact['title']
@@ -232,26 +250,37 @@ def add_new_contacts(district_name: str, report_path: str, contacts: Dict[str, D
 if __name__ == "__main__":
 
     if len(sys.argv) != 2:
-        print("Usage: python map_updates.py <district_file_path>")
+        print("Usage: python map_updates.py <district_folder_path>")
         sys.exit(1)
+    
+    try:
+        os.remove(OUTPUT_PATH)
+    except FileNotFoundError:
+        pass
 
     acct_dict = create_acct_dict(REPORT_PATH)
     role_dict = create_role_dict('role_dictionary.csv')
 
-    district_path = sys.argv[1]
-    district_name = district_path.split('/')[-1].split('.')[0]
+    districts_folder_path = sys.argv[1]
 
-    contacts = {}
-    for row in read_contact_updates(district_path):
-        user = create_updates(row, role_dict)
-        if user['email'] in contacts:
-            user = merge_duplicates(contacts[user['email']], user)
-        contacts[user['email']] = user
+    # go through each file in the folder and add them to the contacts dictionary
 
-    new_contact_emails = update_report(REPORT_PATH, contacts)
+    for filename in os.listdir(districts_folder_path):
+        contacts = {}
+        district_path = os.path.join(districts_folder_path, filename)
+        district_name = filename.split('.')[0]
 
-    new_contacts = {email: contacts[email] for email in new_contact_emails}
+        for row in read_contact_updates(district_path):
+            user = create_updates(row, role_dict)
+            if user['email'] in contacts:
+                user = merge_duplicates(contacts[user['email']], user)
+            contacts[user['email']] = user
+        
 
-    add_new_contacts(district_name, REPORT_PATH, new_contacts, acct_dict)
+        new_contact_emails = update_report(REPORT_PATH, contacts)
+
+        new_contacts = {email: contacts[email] for email in new_contact_emails}
+
+        add_new_contacts(district_name, REPORT_PATH, new_contacts, acct_dict)
 
     
