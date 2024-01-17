@@ -11,11 +11,15 @@ NAV_HEADERS = ['Complimen- tary 5 Year State Report', 'District-Level Benchmark 
 PLANNING_HEADERS = ['Sending Rosters', 'Assessment Calendar', 'Data Locker Management']
 DIST_HEADERS = ['MTSS \nTeam', 'Testing Coordinator', 'Data Team']
 
+errors = {
+    'Missing Roles':set()
+}
+
 def create_role_dict(path: str):
     """Creates a dictionary of roles and their associated permissions"""
     role_dict = {}
     with open(path, 'r') as f:
-        reader = csv.reader(f)
+        reader = csv.reader(f, quotechar='"')
         next(reader) # skip header
         for row in reader:
             role_dict[row[0]] = row[1]
@@ -60,7 +64,7 @@ def get_nav_communication(row: Dict[str, str]) -> list:
             nav_communication.append("CCR")
 
         if row.get(NAV_HEADERS[5]) and row[NAV_HEADERS[5]] == "TRUE":
-            nav_communication.append("ELL")
+            nav_communication.append("ELLs/MLs")
 
         if row.get(NAV_HEADERS[6]) and row[NAV_HEADERS[6]] == "TRUE":
             nav_communication.append("Reading Levels")
@@ -93,7 +97,6 @@ def get_planning_communication(row: Dict[str, str]) -> list:
             planning_communication.append("Data Locker")
 
     except KeyError as e:
-        # print(row)
         raise e
 
     return planning_communication
@@ -144,7 +147,8 @@ def create_updates(row: Dict[str, str], role_dict: Dict[str, str]) -> dict:
         if "Supervisor" in title:
             role = "Student Services Leadership"
         else:
-            raise e
+            errors['Missing Roles'].add(title)
+            role = 'Error'
     email = row['Email'].strip()
     email = ''.join(email.split())
     school = row['Central Office or School Name(s)']
@@ -164,6 +168,7 @@ def create_updates(row: Dict[str, str], role_dict: Dict[str, str]) -> dict:
     user['nav_communication'] = ';'.join(nav_communication)
     user['planning_communication'] = ';'.join(planning_communication)
     user['additional_responsibilities'] = ';'.join(additional_responsibilities)
+    user['confirmed'] = '1'
 
     return user
 
@@ -192,6 +197,7 @@ def merge_duplicates(u1, u2):
     new_user['nav_communication'] = merge_values(u1['nav_communication'], u2['nav_communication'])
     new_user['planning_communication'] = merge_values(u1['planning_communication'], u2['planning_communication'])
     new_user['additional_responsibilities'] = merge_values(u1['additional_responsibilities'], u2['additional_responsibilities'])
+    new_user['confirmed'] = '1'
 
     return new_user
 
@@ -201,6 +207,12 @@ def test_all_headers(row: Dict[str, str]):
         if header not in row:
             raise ValueError(f"Header {header} not found")
     return True    
+
+def match_contact(contact_row, contacts_dict):
+    contact_match = None
+    if contact_row['Email'].lower() in contacts:
+        contact_match = contacts_dict[contact_row['Email']]
+    return contact_match
 
 def update_report(report_path: str, contacts: Dict[str, Dict[str, str]]) -> set:
     """Creates a report of the updates to be made."""
@@ -216,7 +228,8 @@ def update_report(report_path: str, contacts: Dict[str, Dict[str, str]]) -> set:
                 writer.writeheader()
 
             for row in reader:
-                if row['Email'].lower() in contacts:
+                contact_match = match_contact(row, contacts) 
+                if contact_match is not None:
                     contact = contacts[row['Email']]
                     row['First Name'] = contact['firstname']
                     row['Last Name'] = contact['lastname']
@@ -226,6 +239,7 @@ def update_report(report_path: str, contacts: Dict[str, Dict[str, str]]) -> set:
                     row['Navigator Communication'] = contact['nav_communication']
                     row['Planning Communication'] = contact['planning_communication']
                     row['Additional Responsibilities'] = contact['additional_responsibilities']
+                    row['Confirmed by Customer'] = contact['confirmed']
                     writer.writerow(row)
                     existing_contacts.add(row['Email'])
     
@@ -256,6 +270,7 @@ def add_new_contacts(district_name: str, report_path: str, contacts: Dict[str, D
             row['Navigator Communication'] = contact['nav_communication']
             row['Planning Communication'] = contact['planning_communication']
             row['Additional Responsibilities'] = contact['additional_responsibilities']
+            row['Confirmed by Customer'] = contact['confirmed']
             writer.writerow(row)
 
 if __name__ == "__main__":
@@ -271,8 +286,6 @@ if __name__ == "__main__":
 
     acct_dict = create_acct_dict(REPORT_PATH)
     role_dict = create_role_dict('role_dictionary.csv')
-    print(role_dict['MTSS Coach'])
-    exit(0)
 
     districts_folder_path = sys.argv[1]
 
@@ -295,5 +308,13 @@ if __name__ == "__main__":
         new_contacts = {email: contacts[email] for email in new_contact_emails}
 
         add_new_contacts(district_name, REPORT_PATH, new_contacts, acct_dict)
-
     
+    print('Updates Completed.')
+
+    for error_type in errors.keys():
+        if len(errors[error_type]) > 0:
+            print(f'{error_type}:')
+            for err in errors[error_type]:
+                print(f'\t{err}')
+        else:
+            print(f'0 {error_type} errors.')
