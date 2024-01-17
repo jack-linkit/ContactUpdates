@@ -37,7 +37,7 @@ def read_contact_updates(district_file_path: str) -> Generator[Dict[str, str], N
     with open(district_file_path, 'r') as district_file:
         reader = csv.DictReader(district_file)
         for row in reader:
-            if len(row['Email']) > 0 and len(row['Title']) > 0:
+            if len(row['Email']) > 0 and len(row['Title']) > 0 and row['Email'] != 'N/A':
                 yield row
     
 def get_nav_communication(row: Dict[str, str]) -> list:
@@ -123,14 +123,19 @@ def create_updates(row: Dict[str, str], role_dict: Dict[str, str]) -> dict:
     user = {}
     # TODO might be worth removing firstname and lastname
     # check if there is a salutation in the name
-    salutations = ["Mr.", "Ms.", "Mrs.", "Dr."]
-    if row['Name'].split()[0] in salutations:
-        row['Name'] = row['Name'].split('.')[1].strip()
+    salutations = ["Mr.", "Ms.", "Mrs.", "Dr.", "Mr", "Ms", "Mrs", "Dr"]
+    try:
+        if row['Name'].split()[0] in salutations:
+            row['Name'] = row['Name'].split(maxsplit=1)[1].strip()
+    except Exception:
+        print(row)
+        print(row['Name'].split(maxsplit=1).strip())
+        raise ValueError(f"Could not split name: {row['Name']} ({row['Email']})")
     
     try:
-        firstname, lastname = row['Name'].split()
+        firstname, lastname = row['Name'].split(maxsplit=1)
     except ValueError:
-        raise ValueError(f"Could not split name: {row['Name']}")
+        raise ValueError(f"Could not split name: {row['Name']} ({row['Email']})")
 
     title = row['Title'].strip()
     try:
@@ -142,6 +147,7 @@ def create_updates(row: Dict[str, str], role_dict: Dict[str, str]) -> dict:
             raise e
     email = row['Email'].strip()
     email = ''.join(email.split())
+    school = row['Central Office or School Name(s)']
 
     nav_communication = get_nav_communication(row)
 
@@ -154,6 +160,7 @@ def create_updates(row: Dict[str, str], role_dict: Dict[str, str]) -> dict:
     user['title'] = title
     user['role'] = role
     user['email'] = email.lower()
+    user['school'] = school
     user['nav_communication'] = ';'.join(nav_communication)
     user['planning_communication'] = ';'.join(planning_communication)
     user['additional_responsibilities'] = ';'.join(additional_responsibilities)
@@ -181,6 +188,7 @@ def merge_duplicates(u1, u2):
     new_user['title'] = u1['title']
     new_user['role'] = u1['role']
     new_user['email'] = u1['email']
+    new_user['school'] = u2['school']
     new_user['nav_communication'] = merge_values(u1['nav_communication'], u2['nav_communication'])
     new_user['planning_communication'] = merge_values(u1['planning_communication'], u2['planning_communication'])
     new_user['additional_responsibilities'] = merge_values(u1['additional_responsibilities'], u2['additional_responsibilities'])
@@ -214,6 +222,7 @@ def update_report(report_path: str, contacts: Dict[str, Dict[str, str]]) -> set:
                     row['Last Name'] = contact['lastname']
                     row['Title'] = contact['title']
                     row['Role'] = contact['role']
+                    row['School'] = contact['school']
                     row['Navigator Communication'] = contact['nav_communication']
                     row['Planning Communication'] = contact['planning_communication']
                     row['Additional Responsibilities'] = contact['additional_responsibilities']
@@ -242,6 +251,7 @@ def add_new_contacts(district_name: str, report_path: str, contacts: Dict[str, D
             row['Last Name'] = contact['lastname']
             row['Title'] = contact['title']
             row['Role'] = contact['role']
+            row['School'] = contact['school']
             row['Email'] = contact['email']
             row['Navigator Communication'] = contact['nav_communication']
             row['Planning Communication'] = contact['planning_communication']
@@ -261,6 +271,8 @@ if __name__ == "__main__":
 
     acct_dict = create_acct_dict(REPORT_PATH)
     role_dict = create_role_dict('role_dictionary.csv')
+    print(role_dict['MTSS Coach'])
+    exit(0)
 
     districts_folder_path = sys.argv[1]
 
