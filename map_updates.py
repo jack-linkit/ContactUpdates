@@ -6,13 +6,15 @@ from typing import Dict, Generator, Any
 
 from data_processing import create_role_dict, create_acct_dict, read_contact_updates
 from communications import get_nav_communication, get_planning_communication, get_additional_responsibilities, NAV_HEADERS, PLANNING_HEADERS, DIST_HEADERS
+from duplicate_rules import standard_duplicate_rule
 
 REPORT_PATH = 'salesforce_contacts.csv'
 OUTPUT_PATH = 'new_report.csv'
 
 
 errors = {
-    'Missing Roles':set()
+    'Missing Roles': set(),
+    'Mulitple Duplicates': set()
 }
 
     
@@ -108,10 +110,16 @@ def test_all_headers(row: Dict[str, str]):
     return True    
 
 def match_contact(contact_row, contacts_dict):
-    contact_match = None
-    if contact_row['Email'].lower() in contacts:
-        contact_match = contacts_dict[contact_row['Email']]
-    return contact_match
+    standard_rule = lambda c: standard_duplicate_rule(contact_row, c)
+    contact_matches = list(filter(standard_rule, contacts_dict))
+    if len(contact_matches) == 0:
+        return None
+    elif len(contact_matches) == 1:
+        return contact_matches[0]
+    elif len(contact_matches) > 1:
+        errors['Multiple Duplicates'].add(tuple(contact_matches))
+        return contact_matches
+    return contact_matches[0]
 
 def update_report(report_path: str, contacts: Dict[str, Dict[str, str]]) -> set:
     """Creates a report of the updates to be made."""
@@ -127,8 +135,8 @@ def update_report(report_path: str, contacts: Dict[str, Dict[str, str]]) -> set:
                 writer.writeheader()
 
             for row in reader:
-                contact_match = match_contact(row, contacts) 
-                if contact_match is not None:
+                contact_matches = match_contact(row, contacts) 
+                if contact_matches is not None:
                     contact = contacts[row['Email']]
                     row['First Name'] = contact['firstname']
                     row['Last Name'] = contact['lastname']
