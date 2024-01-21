@@ -43,6 +43,8 @@ def create_updates(row: Dict[str, str], role_dict: Dict[str, str]) -> dict:
     except KeyError as e:
         if "Supervisor" in title:
             role = "Student Services Leadership"
+        elif "Principal" in title: 
+            role = "Building Level Leadership"
         else:
             errors['Missing Roles'].add(title)
             role = 'Error'

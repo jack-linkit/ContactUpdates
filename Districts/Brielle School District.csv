@@ -19,8 +19,10 @@ School Counselor,Beth O'Reilly,Brielle School District,boreilly@brielleschool.or
 School Psychologist,Lisa Kenny,Brielle School District,lkenny@brielleschool.org,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE
 ELL Supervisor,,,,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE
 Instructional Technology or Technology Coach,Anthony Mahon,Brielle School District,ajmahon@brielleschool.org,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE
-Math Interventionists and Coaches,"Jessica Booth, Lisa Matter",Brielle School District,"jbooth@brielleschool.org, lmatter@brielleschool.org",FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,TRUE,FALSE,TRUE,TRUE
-ELA Interventionists and Coaches,"Maria Prendergast, Rena Luethold",Brielle School District,"mprendergast@brielleschool.org, rluethold@brielleschool.org",FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,TRUE,FALSE,TRUE,FALSE
+Math Interventionists and Coaches,Jessica Booth,Brielle School District,jbooth@brielleschool.org,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,TRUE,FALSE,TRUE,TRUE
+Math Interventionists and Coaches,Lisa Matter,Brielle School District,lmatter@brielleschool.org,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,TRUE,FALSE,TRUE,TRUE
+ELA Interventionists and Coaches,Rena Luethold,Brielle School District,rluethold@brielleschool.org,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,TRUE,FALSE,TRUE,FALSE
+ELA Interventionists and Coaches,Maria Prendergast,Brielle School District,mprendergast@brielleschool.org,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,TRUE,FALSE,TRUE,FALSE
 Science / STEM Supervisor(s) and Coaches,,,,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE
 Social Studies Supervisor(s) and Coaches,,,,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE
 Other Content Supervisor(s) and Coaches,,,,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE

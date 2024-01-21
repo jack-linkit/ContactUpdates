@@ -1,0 +1,37 @@
+Title,Name,Central Office or School Name(s),Email,Complimen- tary 5 Year State Report,District-Level Benchmark Reports,School-Level Benchmark Reports,Teacher- Level Benchmark Reports,College & Career Readiness Reports,ELLs/MLs Reports,Sending Rosters,Assessment Calendar,Data Locker Management,"MTSS 
+Team",Testing Coordinator,Data Team
+Superintendent,Dr. Susan Elliott,Central Office ,SElliott@umtsd.org ,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE
+Assistant Superintendent ,Dr. Lawrence Cannon,Central Office ,LCannon@umtsd.org ,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE
+Director of Technology,Ian Carder,Central Office,ICarder@umtsd.org,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE
+Director of Student Services,Jaime DeMeester,Central Office,JDeMeester@umtsd.org ,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,FALSE,TRUE,TRUE,TRUE,TRUE,TRUE
+Director of Special Education,Jaime DeMeester,Central Office,JDeMeester@umtsd.org ,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,FALSE,TRUE,TRUE,TRUE,TRUE,TRUE
+Supervisor of ELA / Humanities and Federal Programs,Kelly Gallagher,Central Office ,kgallagher@umtsd. org,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE
+Supervisor of STEAM,Dr. Julie Eastburn,Central Office ,jeastburn@umtsd.org,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE
+Supervisor of SPED K-5,Erin VanCassele,Central Office,evancassele@umtsd.org ,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE
+Supervisor of SPED 6-12,Elizabeth Dertozous,Central Office,edertozous@umtsd.org ,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE
+Student Information Systems Manager,Vicky Sanchez,Central Office,vsanchez@umtsd.org ,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE
+Principal,Joshua Levinson,High School ,jlevinson@umtsd.org,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE
+Assistant Principal,Dr. Leslie Djang,High School ,ldjang@umtsd.org,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE
+Assistant Principal,Julie Mazurek,High School ,jmazurek@umtsd.org ,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE
+Assistant Principal,Sean Feeley,High School ,sfeeley@umtsd.org,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE
+School Counselor,Noelle Baratta,High School ,nbaratta@umtsd.org ,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,FALSE,FALSE,FALSE,FALSE,FALSE
+School Counselor,Amy Purcell,High School ,apurcell@umtsd.org,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,FALSE,FALSE,FALSE,FALSE,FALSE
+School Counselor,Lisa Vesper,High School ,lvesper@umtsd.org ,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,FALSE,FALSE,FALSE,FALSE,FALSE
+School Counselor,Susan Carney,High School ,scarney@umtsd.org ,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,FALSE,FALSE,FALSE,FALSE,FALSE
+School Psychologist,Christopher Bennet,High School ,cbennett@umtsd.org ,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,FALSE,FALSE,FALSE,FALSE,FALSE
+Principal,Shannon Franczkowski ,Middle School ,sfranczkowski@umtsd.org ,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE
+Assistant Principal,Keith Pretlow,Middle School ,kpretlow@umtsd.org ,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE
+Assistant Principal,Kevin Burke,Middle School ,kburke@umtsd.org ,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE
+School Counselor,Brian Haupt,Middle School ,BHaupt@umtsd.org ,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE
+School Counselor,Jennifer Haney,Middle School ,JHaney@umtsd.org ,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE
+School Psychologist,Brianna Williams,Middle School ,BWilliams@umtsd.org ,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE
+Principal,Dr. Michael Bair,Intermediate School,MBair@umtsd.org ,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE
+Assistant Principal,Karen Rhoads,Intermediate School,KRhoads@umtsd.org ,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE
+Principal,Dr. Dena Criss,Primary School,DCriss@umtsd.org ,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE
+Assistant Principal,Shannon Sullivan,Primary School ,SSullivan@umtsd.org ,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE
+School Counselor,Katie Fenningham,Intermediate School,kfenningham@umtsd.org ,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE
+School Counselor,Tyler Groody,Intermediate School,TGroody@umtsd.org ,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE
+School Psychologist, TBD,Primary School,,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE
+School Psychologist,Christine Perrone,Middle School ,CPerrone@umtsd.org ,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE
+School Psychologist,Amber Edmond ,Primary School ,AEdmond@umtsd.org ,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE
+All Teachers,,,,FALSE,,,FALSE,,,,,,,,
