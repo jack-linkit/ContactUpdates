@@ -1,3 +1,8 @@
+# TODO
+- add webscraping capability
+- refactor so majority of contact manipulation is done from the main file/function
+- Fix issue with empty rows being output to new_report.csv
+
 # Considerations
 ## Specific Decisions Made
 - First and last names were not perfect to extract, but including them allows sorts to be more useful in SalesForce

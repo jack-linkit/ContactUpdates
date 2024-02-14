@@ -2,6 +2,7 @@ import csv
 import sys
 import os
 import logging
+import argparse
 
 from typing import Dict
 
@@ -104,16 +105,19 @@ def add_new_contacts(report_path: str, contacts: Dict[str, Contact], acct_dict: 
 
 if __name__ == "__main__":
 
-    if len(sys.argv) != 2:
-        print("Usage: python map_updates.py <district_folder_path>")
-        sys.exit(1)
+    parser = argparse.ArgumentParser(description='Map updates from district files to Salesforce report')
+
+    parser.add_argument('district_folder_path', type=str, help='Path to the folder containing district files')
+    parser.add_argument('-w', '--webscraped', action='store_const', const='Website', default="", help='flag to specify that these contacts were from webscraping')
+
+    args = parser.parse_args()
     
     try:
         os.remove(OUTPUT_PATH)
     except FileNotFoundError:
         pass
 
-    districts_folder_path = sys.argv[1]
+    districts_folder_path = args.district_folder_path
 
     logging.basicConfig(filename='log.txt', encoding='UTF-8', level=logging.DEBUG)
 

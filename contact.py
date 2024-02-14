@@ -3,7 +3,7 @@ from typing import Dict
 
 
 class Contact:
-    def __init__(self, firstname: str, lastname: str, title: str, email: str, school: str, account_name: str, salutation: str = ""):
+    def __init__(self, firstname: str, lastname: str, title: str, email: str, school: str, account_name: str, salutation: str = "", lead_source: str = ""):
         self.firstname = firstname
         self.lastname = lastname
         self.title = title.strip()
@@ -11,6 +11,7 @@ class Contact:
         self.school = school
         self.account_name = account_name
         self.salutation = salutation
+        self.lead_source = lead_source
 
     role: str = ""
     confirmed: str = ""
@@ -32,6 +33,7 @@ class Contact:
         row['Planning Communication'] = ';'.join(self.planning_communication)
         row['Additional Responsibilities'] = ';'.join(self.additional_responsibilities)
         row['Confirmed by Customer'] = self.confirmed
+        row['Lead Source'] = self.lead_source
         # case when the salesforce contact is being inserted
         if acct_dict is not None:
             row = {}
