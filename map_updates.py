@@ -18,11 +18,11 @@ OUTPUT_PATH = 'new_report.csv'
 ROLE_PATH = 'role_dictionary.csv'
  
 
-def create_updates(row: Dict[str, str], district_name: str, role_dict: Dict[str, str]) -> Contact:
+def create_updates(row: Dict[str, str], district_name: str, role_dict: Dict[str, str], lead_source="") -> Contact:
     first_name, last_name, salutation = extract_contact_name(row['Name'])
     contact = Contact(first_name, last_name, row['Title'], row['Email'], row['Central Office or School Name(s)'], district_name, salutation)
     contact.role = role_from_title(contact.title, role_dict)
-    contact.confirmed = '1'
+    contact.confirmed = '1' if lead_source != "Website" else '0'
     # email = ''.join(email.split()).lower()
     contact.nav_communication = get_nav_communication(row)
     contact.planning_communication = get_planning_communication(row)
@@ -91,7 +91,7 @@ def update_report(report_path: str, contacts: Dict[str, Contact]) -> set:
     new_contacts_to_add = set(contacts.keys()) - existing_contacts
     return new_contacts_to_add
 
-def add_new_contacts(report_path: str, contacts: Dict[str, Contact], acct_dict: Dict[str, str]):
+def add_new_contacts(report_path: str, contacts: Dict[str, Contact], acct_dict: Dict[str, str], lead_source: str = ""):
     with open(report_path, 'r', encoding='UTF-8') as report_file:
         reader = csv.DictReader(report_file)
         existing_headers = reader.fieldnames
@@ -100,6 +100,7 @@ def add_new_contacts(report_path: str, contacts: Dict[str, Contact], acct_dict: 
         writer = csv.DictWriter(report_file, fieldnames=existing_headers, quoting=csv.QUOTE_NONNUMERIC)
 
         for contact in contacts.values():
+            contact.lead_source = lead_source
             row = contact.create_updated_row(acct_dict=acct_dict)
             writer.writerow(row)
 
@@ -118,6 +119,7 @@ if __name__ == "__main__":
         pass
 
     districts_folder_path = args.district_folder_path
+    lead_source = args.webscraped
 
     logging.basicConfig(filename='log.txt', encoding='UTF-8', level=logging.DEBUG)
 
@@ -130,7 +132,7 @@ if __name__ == "__main__":
         district_name = filename.split('.')[0]
 
         for row in read_contact_updates(district_file_path):
-            contact = create_updates(row, district_name, role_dict)
+            contact = create_updates(row, district_name, role_dict, lead_source=lead_source)
             if contact.email in contacts:
                 try:
                     # TODO rename merge_duplicates to contact.update()?
@@ -144,6 +146,6 @@ if __name__ == "__main__":
 
         new_contacts = {email: contacts[email] for email in new_contact_emails}
 
-        add_new_contacts(REPORT_PATH, new_contacts, acct_dict)
+        add_new_contacts(REPORT_PATH, new_contacts, acct_dict, lead_source=lead_source)
     
     print('Updates Completed.')

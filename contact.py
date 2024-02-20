@@ -36,7 +36,6 @@ class Contact:
         row['Lead Source'] = self.lead_source
         # case when the salesforce contact is being inserted
         if acct_dict is not None:
-            row = {}
             row['Account Name'] = self.account_name
             row['Account ID'] = acct_dict[self.account_name]
             row['Contact ID'] = ''
